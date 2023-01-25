@@ -4,15 +4,17 @@ import com.github.javafaker.Faker;
 import lombok.Value;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-
+import java.time.format.DateTimeFormatter;
 
 public class DataGenerator {
+    private DataGenerator() {
+    }
 
-  public String generateDate(long addDays, String pattern) {
-
-        return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern(pattern));
+    public static String generateDate(int shift) {
+        String pattern = "dd.LL.yyyy";
+        String data = LocalDate.now().plusDays(shift).format((DateTimeFormatter.ofPattern(pattern)));
+        return data;
     }
 
     public static String generateCity(String locale) {
@@ -33,23 +35,23 @@ public class DataGenerator {
         return number;
     }
 
-
     public static class Registration {
         private Registration() {
         }
 
         public static UserInfo generateUser(String locale) {
             Faker faker = new Faker(new Locale(locale));
-            return new UserInfo(faker.address().city(),
+            UserInfo user = new UserInfo(faker.address().city(),
                     faker.name().fullName(),
                     faker.phoneNumber().phoneNumber());
+            return user;
         }
-    }
 
-    @Value
-    public static class UserInfo {
-        String city;
-        String name;
-        String phone;
+        @Value
+        public static class UserInfo {
+            String city;
+            String name;
+            String phone;
+        }
     }
 }
